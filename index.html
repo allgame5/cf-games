@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="GameHub - Die coolsten Browser-Spiele kostenlos spielen! Flappy Bird, Jump 'n' Run, Memory und mehr.">
+    <title>GameHub | Coole Spiele kostenlos</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+</head>
+<body>
+    <!-- Modernes Particle Canvas im Hintergrund -->
+    <canvas id="particleCanvas"></canvas>
+    
+    <!-- Navigationsleiste -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">🎮</span>
+                <span class="logo-text">GameHub</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link active">Home</a></li>
+                <li><a href="games.html" class="nav-link">Spiele</a></li>
+                <li><a href="#features" class="nav-link">Features</a></li>
+                <li><a href="#contact" class="nav-link">Kontakt</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge">✨ Kostenlos</span>
+                <span class="badge">🎯 Kein Download</span>
+                <span class="badge">🌐 Browser</span>
+            </div>
+            <h1 class="hero-title">
+                Die coolsten 
+                <span class="gradient-text">Browser-Spiele</span>
+            </h1>
+            <p class="hero-subtitle">
+                Flappy Bird, Jump 'n' Run, Memory und viele mehr – alles kostenlos, direkt im Browser.
+                Kein Download, keine Anmeldung!
+            </p>
+            <div class="hero-buttons">
+                <a href="games.html" class="btn btn-primary">
+                    🎲 Jetzt spielen
+                    <span class="btn-glow"></span>
+                </a>
+                <a href="#games" class="btn btn-secondary">
+                    📋 Alle Spiele
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number" data-count="3">0</span>
+                    <span class="stat-label">Coole Spiele</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-count="100">0</span>
+                    <span class="stat-label">Spieler</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-count="24">0</span>
+                    <span class="stat-label">/7 Support</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="floating-card card-1">
+                <span>🐦</span>
+                <p>Flappy Bird</p>
+            </div>
+            <div class="floating-card card-2">
+                <span>🏃‍♂️</span>
+                <p>Jump 'n' Run</p>
+            </div>
+            <div class="floating-card card-3">
+                <span>🧠</span>
+                <p>Memory</p>
+            </div>
+            <div class="orb"></div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Warum GameHub?</span>
+                <h2>Das macht uns besonders</h2>
+                <p>Moderne Spiele, moderne Technologie – alles was dein Herz begehrt</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Blitzschnell</h3>
+                    <p>Optimierte Spiele die sofort laden – keine Wartezeiten, direkt losspielen!</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile First</h3>
+                    <p>Funktioniert perfekt auf Smartphone, Tablet und Desktop – überall spielbar.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Highscores</h3>
+                    <p>Deine Bestwerte werden gespeichert – besiege dich selbst und deine Freunde!</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🆓</div>
+                    <h3>100% Kostenlos</h3>
+                    <p>Keine versteckten Kosten, keine In-App-Käufe – einfach nur Spaß!</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <h3>Regelmäßige Updates</h3>
+                    <p>Neue Spiele und Features werden regelmäßig hinzugefügt.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Überall spielbar</h3>
+                    <p>Keine Installation nötig – öffne den Browser und leg los!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Games Preview -->
+    <section id="games" class="featured-games">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Top Spiele</span>
+                <h2>Meistgespielte Games</h2>
+                <p>Das lieben unsere Spieler am meisten</p>
+            </div>
+            <div class="games-showcase">
+                <div class="game-showcase-card" onclick="window.location.href='games/flappy.html'">
+                    <div class="game-showcase-bg"></div>
+                    <div class="game-showcase-content">
+                        <div class="game-emoji">🐦</div>
+                        <h3>Flappy Bird</h3>
+                        <p>Fliege durch die Röhren und schlage deinen Highscore!</p>
+                        <div class="game-meta">
+                            <span>⭐ 4.8</span>
+                            <span>🎮 1k+ Spieler</span>
+                        </div>
+                        <button class="play-mini-btn">Jetzt spielen →</button>
+                    </div>
+                </div>
+                <div class="game-showcase-card" onclick="window.location.href='games/jumpnrun.html'">
+                    <div class="game-showcase-bg"></div>
+                    <div class="game-showcase-content">
+                        <div class="game-emoji">🏃‍♂️</div>
+                        <h3>Jump 'n' Run</h3>
+                        <p>Springe über Hindernisse und werde schneller!</p>
+                        <div class="game-meta">
+                            <span>⭐ 4.9</span>
+                            <span>🎮 2k+ Spieler</span>
+                        </div>
+                        <button class="play-mini-btn">Jetzt spielen →</button>
+                    </div>
+                </div>
+                <div class="game-showcase-card" onclick="window.location.href='games/memory.html'">
+                    <div class="game-showcase-bg"></div>
+                    <div class="game-showcase-content">
+                        <div class="game-emoji">🧠</div>
+                        <h3>Memory</h3>
+                        <p>Trainiere dein Gedächtnis mit coolen Emojis!</p>
+                        <div class="game-meta">
+                            <span>⭐ 4.7</span>
+                            <span>🎮 500+ Spieler</span>
+                        </div>
+                        <button class="play-mini-btn">Jetzt spielen →</button>
+                    </div>
+                </div>
+            </div>
+            <div class="view-all">
+                <a href="games.html" class="btn btn-outline">Alle Spiele anzeigen →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Bereit für den Highscore?</h2>
+            <p>Starte jetzt eines unserer Spiele und zeig was du drauf hast!</p>
+            <a href="games.html" class="btn btn-primary btn-large">
+                🎮 Direkt loslegen
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <span>🎮</span>
+                    <span>GameHub</span>
+                </div>
+                <p>Die beste Plattform für kostenlose Browser-Spiele. Spielen ohne Grenzen!</p>
+                <div class="social-links">
+                    <a href="#">📘</a>
+                    <a href="#">🐦</a>
+                    <a href="#">📷</a>
+                    <a href="#">🎮</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Spiele</h4>
+                <ul>
+                    <li><a href="games/flappy.html">Flappy Bird</a></li>
+                    <li><a href="games/jumpnrun.html">Jump 'n' Run</a></li>
+                    <li><a href="games/memory.html">Memory</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Info</h4>
+                <ul>
+                    <li><a href="#">Über uns</a></li>
+                    <li><a href="#">Kontakt</a></li>
+                    <li><a href="#">Datenschutz</a></li>
+                    <li><a href="#">Impressum</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Newsletter</h4>
+                <p>Neue Spiele bekommen?</p>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Deine Email">
+                    <button>📧</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 GameHub - Made with 💻 für Vercel + GitHub | Alle Rechte vorbehalten</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
