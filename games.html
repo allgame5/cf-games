@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alle Spiele - GameHub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .games-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .game-card-large {
+            background: rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        
+        .game-card-large:hover {
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.25);
+        }
+        
+        .game-preview {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .game-icon-large {
+            font-size: 5rem;
+        }
+        
+        .game-info {
+            flex: 1;
+        }
+        
+        .play-now {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .play-now:hover {
+            background: #ff5252;
+            transform: scale(1.05);
+        }
+        
+        .difficulty {
+            display: inline-block;
+            background: rgba(0,0,0,0.3);
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎮 Alle Spiele</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="games.html" class="active">Spiele</a>
+        </nav>
+    </header>
+    
+    <main class="games-container">
+        <div class="game-card-large" onclick="window.location.href='games/flappy.html'">
+            <div class="game-preview">
+                <div class="game-icon-large">🐦</div>
+                <div class="game-info">
+                    <h2>Flappy Bird</h2>
+                    <p>Klassiker! Fliege so weit wie möglich durch die Röhren. Klick oder Leertaste zum Fliegen!</p>
+                    <span class="difficulty">⭐ Mittel</span>
+                </div>
+                <button class="play-now">Jetzt spielen →</button>
+            </div>
+        </div>
+        
+        <div class="game-card-large" onclick="window.location.href='games/jumpnrun.html'">
+            <div class="game-preview">
+                <div class="game-icon-large">🏃‍♂️</div>
+                <div class="game-info">
+                    <h2>Jump 'n' Run</h2>
+                    <p>Springe über Kakteen und laufe so weit wie möglich! Je weiter du kommst, desto schneller wird's!</p>
+                    <span class="difficulty">⭐ Einfach</span>
+                </div>
+                <button class="play-now">Jetzt spielen →</button>
+            </div>
+        </div>
+        
+        <div class="game-card-large" onclick="window.location.href='games/memory.html'">
+            <div class="game-preview">
+                <div class="game-icon-large">🧠</div>
+                <div class="game-info">
+                    <h2>Memory</h2>
+                    <p>Finde die passenden Paare und trainiere dein Gedächtnis!</p>
+                    <span class="difficulty">⭐ Einfach</span>
+                </div>
+                <button class="play-now">Jetzt spielen →</button>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>🎯 Highscores werden im Browser gespeichert!</p>
+    </footer>
+</body>
+</html>
