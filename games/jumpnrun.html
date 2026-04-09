@@ -2,368 +2,126 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jump 'n' Run - GameHub</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Courier New', monospace;
-        }
-
-        .game-wrapper {
-            text-align: center;
-            padding: 20px;
-        }
-
-        canvas {
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            background: #f7f7f7;
-        }
-
-        .stats {
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            display: inline-flex;
-            gap: 30px;
-            margin-bottom: 20px;
-            font-size: 1.2rem;
-        }
-
-        .stats span {
-            color: #ff6b6b;
-            font-weight: bold;
-            font-size: 1.5rem;
-        }
-
-        button {
-            background: #ff6b6b;
-            border: none;
-            padding: 10px 30px;
-            border-radius: 50px;
-            color: white;
-            font-size: 1.1rem;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: transform 0.2s;
-        }
-
-        button:hover {
-            transform: scale(1.05);
-        }
-
-        .back-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .controls-info {
-            color: white;
-            margin-top: 15px;
-            font-size: 0.9rem;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Neon Runner - Jump 'n' Run | GameHub</title>
+    <link rel="stylesheet" href="../css/jumpnrun.css">
 </head>
 <body>
-    <a href="../games.html" class="back-btn">← Zurück</a>
-    
-    <div class="game-wrapper">
-        <div class="stats">
-            <div>🏃‍♂️ Score: <span id="score">0</span></div>
-            <div>🏆 Highscore: <span id="highscore">0</span></div>
-        </div>
-        <canvas id="gameCanvas" width="800" height="400"></canvas>
-        <button onclick="resetGame()">🔄 Neustart</button>
-        <div class="controls-info">
-            ␣ Leertaste zum Springen | 🏃‍♂️ Laufe so weit wie möglich!
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-content">
+            <div class="runner-loader"></div>
+            <p>Lade Spiel...</p>
         </div>
     </div>
 
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        
-        // Spieler
-        const player = {
-            x: 100,
-            y: 0,
-            width: 40,
-            height: 40,
-            velocityY: 0,
-            isJumping: false,
-            groundY: canvas.height - 60
-        };
-        player.y = player.groundY - player.height;
-        
-        // Hindernisse
-        let obstacles = [];
-        let frameCount = 0;
-        let spawnRate = 80;
-        let gameRunning = true;
-        let score = 0;
-        let highscore = localStorage.getItem('jumpHighscore') || 0;
-        let gameSpeed = 5;
-        
-        document.getElementById('highscore').textContent = highscore;
-        
-        class Obstacle {
-            constructor() {
-                this.x = canvas.width;
-                this.width = 30;
-                this.height = 35;
-                this.y = player.groundY - this.height;
-            }
+    <!-- Game Container -->
+    <div class="game-container">
+        <!-- Header mit Stats -->
+        <div class="game-header">
+            <div class="game-title">
+                <span class="title-icon">🏃‍♂️</span>
+                <h1>NEON RUNNER</h1>
+                <span class="title-icon">⚡</span>
+            </div>
+            <div class="stats-panel">
+                <div class="stat-card">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-info">
+                        <span class="stat-label">SCORE</span>
+                        <span class="stat-value" id="score">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-info">
+                        <span class="stat-label">BEST</span>
+                        <span class="stat-value" id="highscore">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-info">
+                        <span class="stat-label">SPEED</span>
+                        <span class="stat-value" id="speedLevel">1</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Canvas Bereich -->
+        <div class="canvas-wrapper">
+            <canvas id="gameCanvas" width="1000" height="500"></canvas>
             
-            draw() {
-                // Kaktus
-                ctx.fillStyle = '#2d6a4f';
-                ctx.fillRect(this.x, this.y, this.width, this.height);
-                ctx.fillStyle = '#1b4332';
-                for(let i = 0; i < 3; i++) {
-                    ctx.fillRect(this.x + 5 + i*8, this.y - 15, 6, 15);
-                }
-                // Gesicht
-                ctx.fillStyle = '#7400b8';
-                ctx.fillRect(this.x + 5, this.y + 10, 5, 5);
-                ctx.fillRect(this.x + 20, this.y + 10, 5, 5);
-            }
-            
-            update() {
-                this.x -= gameSpeed;
-            }
-        }
-        
-        function drawPlayer() {
-            // Körper
-            ctx.fillStyle = '#ff6b6b';
-            ctx.fillRect(player.x, player.y, player.width, player.height);
-            
-            // Kopf (rund)
-            ctx.fillStyle = '#ff8c42';
-            ctx.beginPath();
-            ctx.arc(player.x + player.width/2, player.y - 10, 20, 0, Math.PI*2);
-            ctx.fill();
-            
-            // Auge
-            ctx.fillStyle = 'white';
-            ctx.beginPath();
-            ctx.arc(player.x + player.width - 10, player.y - 15, 5, 0, Math.PI*2);
-            ctx.fill();
-            ctx.fillStyle = 'black';
-            ctx.beginPath();
-            ctx.arc(player.x + player.width - 8, player.y - 15, 2, 0, Math.PI*2);
-            ctx.fill();
-            
-            // Beine (animiert)
-            const legOffset = Math.sin(Date.now() * 0.01) * 5;
-            ctx.fillStyle = '#ff6b6b';
-            ctx.fillRect(player.x + 5, player.y + player.height, 8, 15 + legOffset);
-            ctx.fillRect(player.x + player.width - 13, player.y + player.height, 8, 15 - legOffset);
-        }
-        
-        function drawGround() {
-            ctx.fillStyle = '#8B4513';
-            ctx.fillRect(0, player.groundY, canvas.width, canvas.height - player.groundY);
-            
-            // Gras
-            ctx.fillStyle = '#2d6a4f';
-            for(let i = 0; i < 20; i++) {
-                ctx.fillRect(i * 40 + (Date.now() * 0.1) % 40, player.groundY - 5, 5, 10);
-            }
-            
-            // Linie
-            ctx.strokeStyle = '#ffd166';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.setLineDash([20, 30]);
-            ctx.moveTo(0, player.groundY - 10);
-            ctx.lineTo(canvas.width, player.groundY - 10);
-            ctx.stroke();
-            ctx.setLineDash([]);
-        }
-        
-        function drawBackground() {
-            // Himmel
-            const gradient = ctx.createLinearGradient(0, 0, 0, player.groundY);
-            gradient.addColorStop(0, '#ffd166');
-            gradient.addColorStop(1, '#f4a261');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, canvas.width, player.groundY);
-            
-            // Wolken
-            ctx.fillStyle = 'rgba(255,255,255,0.7)';
-            ctx.beginPath();
-            ctx.arc(100 + (Date.now() * 0.05) % 200, 80, 30, 0, Math.PI*2);
-            ctx.arc(140 + (Date.now() * 0.05) % 200, 70, 35, 0, Math.PI*2);
-            ctx.arc(180 + (Date.now() * 0.05) % 200, 80, 30, 0, Math.PI*2);
-            ctx.fill();
-            
-            ctx.beginPath();
-            ctx.arc(500 + (Date.now() * 0.03) % 300, 120, 25, 0, Math.PI*2);
-            ctx.arc(540 + (Date.now() * 0.03) % 300, 110, 30, 0, Math.PI*2);
-            ctx.fill();
-        }
-        
-        function updatePlayer() {
-            if(!gameRunning) return;
-            
-            // Physik
-            player.velocityY += 0.8;
-            player.y += player.velocityY;
-            
-            // Bodenkollision
-            if(player.y >= player.groundY - player.height) {
-                player.y = player.groundY - player.height;
-                player.isJumping = false;
-                player.velocityY = 0;
-            }
-            
-            // Deckekollision
-            if(player.y < 0) {
-                player.y = 0;
-                if(player.velocityY < 0) player.velocityY = 0;
-            }
-        }
-        
-        function updateObstacles() {
-            if(!gameRunning) return;
-            
-            frameCount++;
-            
-            // Neue Hindernisse spawnen
-            if(frameCount >= spawnRate && obstacles.length < 3) {
-                frameCount = 0;
-                obstacles.push(new Obstacle());
-                // Schwierigkeit erhöhen
-                if(score > 500) spawnRate = 40;
-                else if(score > 300) spawnRate = 55;
-                else if(score > 100) spawnRate = 65;
-            }
-            
-            // Hindernisse bewegen und kollision prüfen
-            for(let i = 0; i < obstacles.length; i++) {
-                obstacles[i].update();
-                
-                // Kollision
-                if(player.x < obstacles[i].x + obstacles[i].width &&
-                   player.x + player.width > obstacles[i].x &&
-                   player.y < obstacles[i].y + obstacles[i].height &&
-                   player.y + player.height > obstacles[i].y) {
-                    gameOver();
-                }
-                
-                // Score erhöhen wenn vorbei
-                if(obstacles[i].x + obstacles[i].width < player.x && !obstacles[i].counted) {
-                    obstacles[i].counted = true;
-                    score += 10;
-                    document.getElementById('score').textContent = Math.floor(score);
-                    
-                    // Highscore update
-                    if(score > highscore) {
-                        highscore = Math.floor(score);
-                        document.getElementById('highscore').textContent = highscore;
-                        localStorage.setItem('jumpHighscore', highscore);
-                    }
-                    
-                    // Geschwindigkeit erhöhen
-                    gameSpeed = 5 + Math.floor(score / 300);
-                }
-                
-                // Entfernen
-                if(obstacles[i].x + obstacles[i].width < 0) {
-                    obstacles.splice(i, 1);
-                    i--;
-                }
-            }
-        }
-        
-        function gameOver() {
-            gameRunning = false;
-            ctx.fillStyle = 'rgba(0,0,0,0.8)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'white';
-            ctx.font = 'bold 40px monospace';
-            ctx.fillText('GAME OVER', canvas.width/2 - 130, canvas.height/2 - 50);
-            ctx.font = '25px monospace';
-            ctx.fillText(`Score: ${Math.floor(score)}`, canvas.width/2 - 70, canvas.height/2);
-            ctx.font = '18px monospace';
-            ctx.fillText('Drücke Neustart', canvas.width/2 - 80, canvas.height/2 + 50);
-        }
-        
-        function resetGame() {
-            gameRunning = true;
-            score = 0;
-            gameSpeed = 5;
-            spawnRate = 80;
-            frameCount = 0;
-            obstacles = [];
-            player.y = player.groundY - player.height;
-            player.velocityY = 0;
-            player.isJumping = false;
-            document.getElementById('score').textContent = '0';
-        }
-        
-        function jump() {
-            if(!gameRunning) return;
-            if(!player.isJumping) {
-                player.velocityY = -12;
-                player.isJumping = true;
-            }
-        }
-        
-        function gameLoop() {
-            updatePlayer();
-            updateObstacles();
-            
-            drawBackground();
-            drawGround();
-            
-            for(const obstacle of obstacles) {
-                obstacle.draw();
-            }
-            
-            drawPlayer();
-            
-            // Score Anzeige im Canvas
-            ctx.fillStyle = '#2b2d42';
-            ctx.font = 'bold 20px monospace';
-            ctx.fillText(`Speed: ${gameSpeed}`, 20, 50);
-            
-            requestAnimationFrame(gameLoop);
-        }
-        
-        // Event Listener
-        document.addEventListener('keydown', (e) => {
-            if(e.code === 'Space') {
-                e.preventDefault();
-                jump();
-            }
-        });
-        
-        canvas.addEventListener('click', () => jump());
-        
-        // Spiel starten
-        resetGame();
-        gameLoop();
-    </script>
+            <!-- UI Overlays -->
+            <div class="game-overlay" id="gameOverlay" style="display: none;">
+                <div class="overlay-content">
+                    <div class="game-over-icon">💀</div>
+                    <h2>GAME OVER</h2>
+                    <div class="final-score">
+                        <p>Dein Score</p>
+                        <span id="finalScore">0</span>
+                    </div>
+                    <div class="overlay-buttons">
+                        <button class="overlay-btn restart-btn" onclick="resetGame()">
+                            🔄 Nochmal
+                        </button>
+                        <button class="overlay-btn menu-btn" onclick="window.location.href='../games.html'">
+                            🏠 Menü
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pause-overlay" id="pauseOverlay" style="display: none;">
+                <div class="pause-content">
+                    <div class="pause-icon">⏸️</div>
+                    <h2>PAUSE</h2>
+                    <button class="overlay-btn" onclick="togglePause()">▶️ Weiter</button>
+                </div>
+            </div>
+
+            <div class="start-prompt" id="startPrompt">
+                <div class="prompt-content">
+                    <div class="prompt-arrow">👆</div>
+                    <p>Drücke <kbd>SPACE</kbd> oder <kbd>⬆️</kbd> zum Springen</p>
+                    <button class="start-btn" onclick="startGame()">▶️ START</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls Info -->
+        <div class="controls-info">
+            <div class="control-key">
+                <kbd>␣</kbd>
+                <span>Springen</span>
+            </div>
+            <div class="control-key">
+                <kbd>P</kbd>
+                <span>Pause</span>
+            </div>
+            <div class="control-key">
+                <kbd>R</kbd>
+                <span>Neustart</span>
+            </div>
+            <div class="control-key mobile-only">
+                <span>👆</span>
+                <span>Tap zum Springen</span>
+            </div>
+        </div>
+
+        <!-- Power-Up Anzeige -->
+        <div class="powerup-bar" id="powerupBar">
+            <div class="powerup-indicator" id="powerupIndicator" style="display: none;">
+                <span id="powerupIcon">🛡️</span>
+                <span id="powerupText">Shield</span>
+                <div class="powerup-timer">
+                    <div class="timer-fill" id="powerupTimer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/jumpnrun.js"></script>
 </body>
 </html>
